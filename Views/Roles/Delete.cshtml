@@ -1,0 +1,47 @@
+﻿@model Microsoft.AspNet.Identity.EntityFramework.IdentityRole
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Are you sure want to delete this role?</h2>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+
+        <dt>
+            Role name
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <dl class="dl-horizontal">
+                <dd>
+                    <input type="submit" value="Delete" class="btn btn-default" />
+                    <button class="btn btn-default" onclick="location.href='@Url.Action("ManageRoles", "Admin")';return false;">Cancel</button>
+                </dd>
+            </dl>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

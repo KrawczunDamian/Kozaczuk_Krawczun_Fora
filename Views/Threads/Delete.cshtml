@@ -1,0 +1,104 @@
+﻿@model Fora2.Models.Thread
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this thread?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Author.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Author.Email)
+        </dd>
+
+        <dt>
+            Forum
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Forum.Name)
+        </dd>
+
+        <dt>
+            Views
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ViewsCount)
+        </dd>
+
+        <dt>
+            Comments
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CommentsCount)
+        </dd>
+
+        <dt>
+            Thread subject
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            Thread message
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Context)
+        </dd>
+
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreateDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastModified)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastModified)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsActive)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Sticked)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sticked)
+        </dd>
+
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> 
+            <button class="btn btn-default" onclick="location.href='@Url.Action("Index", "Threads", new { id = Model.ForumId})';return false;">Cancel</button>
+        </div>
+    }
+</div>

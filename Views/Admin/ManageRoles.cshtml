@@ -1,0 +1,30 @@
+﻿@model List <Microsoft.AspNet.Identity.EntityFramework.IdentityRole>
+@{
+    ViewBag.Title = "Manage roles";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div>
+    <button class="btn btn-default" onclick="location.href='@Url.Action("Create", "Roles")';return false;">Create role</button>
+    @foreach (var role in Model)
+    {
+        <hr />
+        <div class="card mb-3">
+            <div>
+                <b>Role Id : </b>@role.Id
+            </div>
+            <div>
+                <b>Role Name:</b> @role.Name
+            </div>
+            <div>
+                <button class="btn btn-default" onclick="location.href='@Url.Action("Edit", "Roles",new { id = role.Id })';return false;">Edit</button>
+                <button class="btn btn-default" onclick="location.href='@Url.Action("Delete", "Roles", new { id=role.Id })';return false;">Delete</button>
+            </div>
+
+        </div>
+    }
+
+
+</div>

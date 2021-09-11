@@ -1,0 +1,71 @@
+﻿@model Fora2.Models.Thread
+
+@{
+    ViewBag.Title = "Create";
+}
+
+
+@if (ViewBag.SelectedForum)
+{
+<h2>Create new thread for forum @Html.ActionLink(@Model.Forum.Name, "Index", "Threads", new { id = Model.Forum.ForumId }, null) in @Html.ActionLink(@Model.Forum.ForumCategory.Name, "Index", "Fora", new { id = Model.Forum.ForumCategoryId }, null)</h2>
+
+}
+else
+{
+    <h2>Create New Thread</h2>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+
+    <hr />
+
+        @if (ViewBag.SelectedForum)
+        {
+            @Html.HiddenFor(model => model.ViewsCount);
+            @Html.HiddenFor(model => model.CommentsCount);
+            @Html.HiddenFor(model => model.Sticked);
+            @Html.HiddenFor(model => model.CreateDate);
+            @Html.HiddenFor(model => model.LastModified);
+            @Html.HiddenFor(model => model.IsActive);
+            @Html.HiddenFor(model => model.AuthorId);
+            @Html.HiddenFor(model => model.ForumId);
+
+        }
+
+
+    <div class="form-group">
+        <label class="control-label col-md-2">Thread subject</label>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+        <label class="control-label col-md-2">Content message</label>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Context, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Context, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" /> <button class="btn btn-default" onclick="location.href='@Url.Action("Index", "Threads", new { id = Model.ForumId})';return false;">Cancel</button>
+        </div>
+    </div>
+</div>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

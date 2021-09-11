@@ -1,0 +1,58 @@
+﻿@model Fora2.Models.ThreadMessage
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ThreadMessage</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Author.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Author.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Thread.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Thread.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Context)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Context)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreateDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastModified)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastModified)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ThreadMessageId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

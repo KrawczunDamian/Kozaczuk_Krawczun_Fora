@@ -1,0 +1,113 @@
+﻿@model IPagedList<Fora2.Models.ThreadMessage>
+@using PagedList.Mvc;
+@using PagedList;
+@{
+    ViewBag.Title = "Details";
+}
+@{
+    string catName = ViewBag.Thread.Forum.ForumCategory.Name;
+    string forumName = ViewBag.Thread.Forum.Name;
+    int catID = ViewBag.Thread.Forum.ForumCategoryId;
+    int forumID = ViewBag.Thread.Forum.ForumId;
+    string threadAuthor = ViewBag.Thread.Author.UserName;
+    System.DateTime threadCreateDate = ViewBag.Thread.CreateDate;
+    string threadName = ViewBag.Thread.Name;
+    string threadContext = ViewBag.Thread.Context;
+    int threadID = ViewBag.Thread.ThreadId;
+    string threadAuthorAvatar = ViewBag.Thread.Author.AvatarURL;
+}
+<div class="threadHead">
+    <div class="threadCategory">
+        @Html.ActionLink("Home", "Index", "Home")>
+        @Html.ActionLink("Categories", "Index", "ForumCategories")>
+        @Html.ActionLink(catName, "Index", "Fora", new { id = catID }, null)>
+        @Html.ActionLink(forumName, "Index", "Threads", new { id = forumID }, null)
+    </div>
+    @if (threadAuthorAvatar == null)
+    {
+        <div class="threadUser">Post by user <img src="~/Icons/BasicUser.png" width="16" height="16" /><i>@threadAuthor</i>  created on @threadCreateDate</div>
+    }
+    else
+    {
+        <div class="threadUser">Post by user <img src="@threadAuthorAvatar" width="16" height="16" /><i>@threadAuthor</i>  created on @threadCreateDate</div>
+    }
+    <div class="threadName">@threadName</div>
+    <pre class="threadContent">@threadContext</pre>
+
+    @*pokaz opcje edycji watku*@
+
+    @if (ViewBag.UserIsAdmin)
+    {
+        <button class="btn btn-default" onclick="location.href='@Url.Action("Edit", "Threads", new { id = threadID })';return false;">Edit</button>
+        <button class="btn btn-default" onclick="location.href='@Url.Action("Delete", "Threads", new { id = threadID})';return false;">Delete</button>
+    }
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    if (ViewBag.AnonymousCanComment)
+    {
+        <div class="form-horizontal">
+            <h4>Comment</h4>
+            @if (ViewBag.IsContainsForbiddenWords)
+            {
+                <h4>! You used forbidden words:</h4>
+                <div style="background-color: #FFFF00">
+
+                    @foreach (var word in ViewBag.ForbiddenWords)
+                    {
+                        <a>@word &nbsp;</a>
+
+                    }
+                </div>
+            }
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div>
+                <textarea name="newMessageContext" class="threadCommentInput"></textarea>
+                <div>During text entry, type <b> Windows logo key + . (period) </b> to see emoji keyboard 😉</div>
+            </div>
+            <div style="margin:10px 0px 10px 0px">
+                <input type="submit" value="Send" class="btn btn-default" />
+            </div>
+        </div>
+    }
+    else
+    {
+        <h2 style="background-color: #FFFF00">You must log in to post comments</h2>
+    }
+}
+<div>
+    @foreach (var item in Model.OrderBy(i => i.CreateDate))
+    {
+        <hr />
+        <div class="threadCommentAuthorAndDate">
+            @if (item.Author.AvatarURL == null)
+            {
+                <div class="threadUser">Post by user <img src="~/Icons/BasicUser.png" width="16" height="16" /><i>@Html.DisplayFor(modelItem => item.Author.Email)</i>  created on @Html.DisplayFor(modelItem => item.CreateDate)</div>
+            }
+            else
+            {
+                <div class="threadUser">Post by user <img src="@item.Author.AvatarURL" width="16" height="16" /><i>@Html.DisplayFor(modelItem => item.Author.Email)</i>  created on @Html.DisplayFor(modelItem => item.CreateDate)</div>
+            }
+        </div>
+        <div class="threadCommentContent">
+            @Html.DisplayFor(modelItem => item.Context)
+        </div>
+
+        if (ViewBag.UserIsModerator)
+        {
+            <button class="btn btn-default" onclick="location.href='@Url.Action("Edit", "ThreadMessages", new { id = item.ThreadMessageId })';return false;">Edit</button>
+            <button class="btn btn-default" onclick="location.href='@Url.Action("Delete", "ThreadMessages", new { id = item.ThreadMessageId })';return false;">Delete</button>
+        }
+    }
+</div>
+@Html.PagedListPager(Model, page => Url.Action("Details", "Threads", new { page }))
+<div class="threadCategory">
+    @Html.ActionLink("Home", "Index", "Home")>
+    @Html.ActionLink("Categories", "Index", "ForumCategories")>
+    @Html.ActionLink(catName, "Index", "Fora", new { id = catID }, null)>
+    @Html.ActionLink(forumName, "Index", "Threads", new { id = forumID }, null)
+</div>

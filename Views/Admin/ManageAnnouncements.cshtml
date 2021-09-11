@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Fora2.Models.Announcement>
+@{
+    ViewBag.Title = "Announcements";
+}
+
+<div class="jumbotron">
+    <h1>Announcements</h1>
+    <button class="btn btn-default" onclick="location.href='@Url.Action("Create", "Announcements")';return false;">Create new announcement</button>
+    @foreach (var item in Model)
+    {
+
+        <hr style="margin:10px 0px 0px 0px" />
+        <div>
+            @Html.DisplayFor(modelItem => item.CreateDate)
+        </div>
+        <div class="threadCommentContent">
+            @Html.DisplayFor(modelItem => item.Content)
+        </div>
+        <div>
+            @Html.ActionLink("Edit", "Edit", "Announcements", new { id = item.Id }, null) |
+            @Html.ActionLink("Delete", "Delete", "Announcements", new { id = item.Id }, null)
+        </div>
+    }
+    <hr / style="margin:10px 0px 0px 0px">
+</div>

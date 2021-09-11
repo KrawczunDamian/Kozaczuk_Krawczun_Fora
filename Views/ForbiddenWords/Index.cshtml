@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Fora2.Models.ForbiddenWord>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>List of forbidden words</h2>
+
+<p>
+    <button class="btn btn-default" onclick="location.href='@Url.Action("Create")';return false;">Add a word</button>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Word)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Word)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ForbiddenWordId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ForbiddenWordId })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Fora2.Models.ForumCategory>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="threadCategory">@Html.ActionLink("Home", "Index", "Home")><u>Categories of forums</u></div>
+
+@if (ViewBag.UserIsAdmin)
+{
+    <p>
+        <button class="btn btn-default" onclick="location.href='@Url.Action("Create")';return false;">Add category</button>
+    </p>
+}
+<table class="table">
+    <tr>
+        <th>
+            Category
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.ActionLink(item.Name,"Index","Fora", new {id = item.ForumCategoryId},null)
+        </td>
+        <td>
+        @if (ViewBag.UserIsAdmin)
+        {
+            @Html.ActionLink("Edit", "Edit", new { id=item.ForumCategoryId }) 
+            @:|
+            @Html.ActionLink("Delete", "Delete", new { id=item.ForumCategoryId }) 
+        }
+        </td>
+    </tr>
+}
+</table>

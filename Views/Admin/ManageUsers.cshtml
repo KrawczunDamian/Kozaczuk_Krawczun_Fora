@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Fora2.Models.ApplicationUser>
+@{
+    ViewBag.Title = "Users";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div>
+    <h4>Manage users</h4>
+    @foreach (var user in Model)
+    {
+        <hr />
+        <div class="card mb-3">
+            <div>
+                User Id : @user.Id
+            </div>
+            <div>
+                User Email : @user.Email
+            </div>
+            <div>
+                UserName : @user.UserName
+            </div>
+
+            <div>
+                Points : @user.Points
+            </div>
+
+
+            <div>
+                <button class="btn btn-default" onclick="location.href='@Url.Action("EditUser", "Admin", new { id = user.Id})';return false;">Edit</button>
+            </div>
+
+        </div>
+    }
+
+
+</div>

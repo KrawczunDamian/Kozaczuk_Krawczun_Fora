@@ -1,0 +1,34 @@
+﻿@model Fora2.Models.AnnouncementsPlusCategoriesModel
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Announcements</h1>
+    @foreach (var item in Model.Announcements)
+    {
+        <hr style="margin:10px 0px 0px 0px" />
+        <div>
+            @Html.DisplayFor(modelItem => item.CreateDate)
+        </div>
+        <div class="threadCommentContent">
+            @Html.DisplayFor(modelItem => item.Content)
+        </div>             
+    }
+    <hr / style="margin:10px 0px 0px 0px">
+    Number of registered users: @ViewBag.RegisteredUsers
+</div>
+<div style="margin:10px 0px 0px 0px;">
+    <h1>Categories of forums</h1>
+    @foreach (var item in Model.Categories)
+    {
+        <hr/>
+        <div class="threadCategory">
+            @Html.ActionLink(item.Name, "Index", "Fora", new { id = item.ForumCategoryId }, null)
+        </div>
+    }
+    <hr/>
+</div>
+
+</div>

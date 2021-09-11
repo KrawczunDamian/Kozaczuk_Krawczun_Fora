@@ -1,0 +1,157 @@
+﻿@model Fora2.Models.Thread
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Thread</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Author.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Author.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Forum.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Forum.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ViewsCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ViewsCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CommentsCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CommentsCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Sticked)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sticked)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Context)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Context)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreateDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastModified)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastModified)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsActive)
+        </dd>
+
+    </dl>
+</div>
+
+<div>
+    <table class="table">
+        @foreach (var item in Model.ThreadMessages.OrderBy(i => i.CreateDate))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Author.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Thread.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Context)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreateDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastModified)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ThreadMessageId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.ThreadMessageId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ThreadMessageId })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+<h2>Add new thread message</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>ThreadMessage</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+
+            <input type="text" name="newMessageContext"/>
+
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value=@ViewBag.CurrentThreadId class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ThreadId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

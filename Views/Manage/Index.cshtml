@@ -1,0 +1,92 @@
+﻿@model Fora2.Models.IndexViewModel
+@{
+    ViewBag.Title = "Settings";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div>
+    <h4>Change your account settings</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Avatar:</dt>
+        <dd>
+            <img src="@ViewBag.AvatarURL" width="128" height="128" alt="avatar" /><br />
+            <button class="btn btn-default" onclick="location.href='@Url.Action("UploadAvatar", "FileUpload")';return false;">Change avatar</button>
+        </dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>Username:</dt>
+        <dd>
+            @ViewBag.User.UserName
+        </dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>Password:</dt>
+        <dd>
+            [
+            @if (Model.HasPassword)
+            {
+                @Html.ActionLink("Change your password", "ChangePassword")
+            }
+            else
+            {
+                @Html.ActionLink("Create", "SetPassword")
+            }
+            ]
+        </dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>Messages per page:</dt>
+        <dd>
+            @ViewBag.User.MessagesPerPage <button class="btn btn-default" onclick="location.href='@Url.Action("ManagePages")';return false;">Change</button>
+        </dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>Your roles:</dt>
+        <dd>
+            @foreach (var role in ViewBag.UserRoles)
+            {
+                <div>@role</div>
+            }
+        </dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>Points</dt>
+        <dd>
+
+            <div>@ViewBag.UserPoints</div>
+
+        </dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>Rank</dt>
+        <dd>
+
+            <div>@ViewBag.UserRank</div>
+
+        </dd>
+    </dl>
+    @{ if (User.IsInRole("Admin"))
+        {
+            <dl class="dl-horizontal">
+                <dt>Manage:</dt>
+                <dd>
+                    <button class="btn btn-default" onclick="location.href='@Url.Action("ManageUsers", "Admin")';return false;">Users</button>
+                    <button class="btn btn-default" onclick="location.href='@Url.Action("ManageAnnouncements", "Admin")';return false;">Announcements</button>
+                    <button class="btn btn-default" onclick="location.href='@Url.Action("ManageRoles", "Admin")';return false;">Roles</button>
+                    <button class="btn btn-default" onclick="location.href='@Url.Action("Index", "Ranks")';return false;">Ranks</button>
+                    <button class="btn btn-default" onclick="location.href='@Url.Action("Index", "Threads")';return false;">All threads</button>
+                    <button class="btn btn-default" onclick="location.href='@Url.Action("Index", "ThreadMessages")';return false;">All thread messages</button>
+                    <button class="btn btn-default" onclick="location.href='@Url.Action("Index", "ForbiddenWords")';return false;">Forbidden words</button>
+
+                </dd>
+            </dl>
+        }
+    }
+
+
+
+
+</div>

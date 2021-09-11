@@ -1,0 +1,236 @@
+﻿@model IEnumerable<Fora2.Models.Thread>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@if (ViewBag.CurrentForum != null)
+{
+    string categoryName = ViewBag.CurrentForum.ForumCategory.Name;
+    <div class="threadCategory">@Html.ActionLink("Home", "Index", "Home")>@Html.ActionLink("Categories", "Index", "ForumCategories")>@Html.ActionLink(categoryName, "Index", "Fora", new { id = ViewBag.CurrentForum.ForumCategory.ForumCategoryId }, null)><u>@ViewBag.CurrentForum.Name</u></div>
+    <p>
+        <button class="btn btn-default" onclick="location.href='@Url.Action("Create", "Threads", new { id = ViewBag.CurrentForum.ForumId })';return false;">Create new thread</button>
+    </p>
+}
+else
+{
+    <div class="threadCategory">All Threads</div>
+}
+
+
+@if (ViewBag.CurrentForum != null)
+{
+    using (Html.BeginForm("Index"))
+    {
+        <input value="@ViewBag.CurrentForumId" hidden="hidden" />
+        <div style="float:right;">
+            <textarea placeholder="Enter a word to search in this forum... You can use AND, OR, NOT operators." cols="70" rows="1" name="searchWord"></textarea>
+            <input type="submit" value="Search" class="btn btn-default" />
+        </div>
+    }
+
+}
+@*// pokaz wyniki wyszukiwania jesli byly jakies*@
+@if (ViewBag.SearchedWord != null && ViewBag.SearchedWord != "")
+{
+
+    <h3>Result for searching "@ViewBag.SearchedWord"</h3>
+    <table class="table" style="border-style:solid; border-width:1px;">
+        <tr>
+            <th>
+                Author
+            </th>
+            <th>
+                Thread
+            </th>
+
+            <th>
+                Comment
+            </th>
+            <th>
+                Create Date
+            </th>
+            <th>
+                Last Modified
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (Fora2.Models.ThreadMessage message in ViewBag.SearchedMessages)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => message.Author.Email)
+                </td>
+                <td>
+                    @Html.ActionLink(message.Thread.Name, "Details", "Threads", new { id = message.ThreadId }, null)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => message.Context)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => message.CreateDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => message.LastModified)
+                </td>
+                    @if (ViewBag.UserIsAdmin)
+                    {
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = message.ThreadMessageId }) |
+                        @Html.ActionLink("Details", "Details", new { id = message.ThreadMessageId }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = message.ThreadMessageId })
+                    </td>
+                }
+                </tr>
+            }
+
+    </table>
+}
+
+
+<table class="table" style="border-style:solid; border-width:1px;">
+    <tr>
+        <th>
+            Title, Author
+        </th>
+        <th>
+            Created on
+        </th>
+        <th>
+            Views
+        </th>
+        <th>
+            Replies
+        </th>
+        <th>
+            Last messsage
+        </th>
+
+        <th>Is pinned</th>
+        @if (ViewBag.UserIsAdmin)
+        {
+        <th>Manage</th>
+        }
+        </tr>
+    @if (ViewBag.UserIsAdmin)
+    {
+        <tr><td style="background-color:dimgrey" colspan="7"><b>>Pinned threads</b></td></tr>
+    }
+    else
+    {
+        <tr><td style="background-color:dimgrey" colspan="6"><b>>Pinned threads</b></td></tr>
+    }
+    @foreach (var item in Model.OrderBy(i => i.CreateDate))
+    {
+        if (item.Sticked)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(item.Name, "Details", new { id = item.ThreadId })<br />
+                    @if (item.Author.AvatarURL == null)
+                    {
+                        <img src="~/Icons/BasicUser.png" width="32" height="32" />@Html.DisplayFor(modelItem => item.Author.Email)
+                    }
+                    else
+                    {
+                        <img src="@item.Author.AvatarURL" width="32" height="32" />@Html.DisplayFor(modelItem => item.Author.Email)
+                    }
+                </td>
+                <td>
+                    @item.CreateDate.Day.@item.CreateDate.Month.@item.CreateDate.Year
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ViewsCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CommentsCount)
+                </td>
+                <td>
+                    @item.LastModified.Day.@item.LastModified.Month.@item.LastModified.Year
+                </td>
+                <td>
+                    @if (ViewBag.UserIsAdmin)
+                    {
+                        <a href="@Url.Action("Stick", "Threads", new { id = item.ThreadId }, null)">
+                            <img src="~/Icons/pinnedPost.png" width="32" height="32" />
+                        </a>
+                    }
+                    else
+                    {
+                        <img src="~/Icons/pinnedPost.png" width="32" height="32" />
+                    }
+                </td>
+                @if (ViewBag.UserIsAdmin)
+                {
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ThreadId })
+                        @Html.ActionLink("Details", "Details", new { id = item.ThreadId })
+                        @Html.ActionLink("Delete", "Delete", new { id = item.ThreadId })
+                    </td>
+                }
+            </tr>
+        }
+    }
+    @if (ViewBag.UserIsAdmin)
+    {
+        <tr><td style="background-color:dimgrey" colspan="7"><b>>Normal threads</b></td></tr>
+    }
+    else
+    {
+        <tr><td style="background-color:dimgrey" colspan="6"><b>>Normal threads</b></td></tr>
+    }
+    @foreach (var item in Model.OrderBy(i => i.CreateDate))
+    {
+        if (!item.Sticked)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(item.Name, "Details", new { id = item.ThreadId })<br />
+                    @if (item.Author.AvatarURL == null)
+                    {
+                        <img src="~/Icons/BasicUser.png" width="32" height="32" />@Html.DisplayFor(modelItem => item.Author.Email)
+                    }
+                    else
+                    {
+                        <img src="@item.Author.AvatarURL" width="32" height="32" />@Html.DisplayFor(modelItem => item.Author.Email)
+                    }
+                </td>
+                <td>
+                    @item.CreateDate.Day.@item.CreateDate.Month.@item.CreateDate.Year
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ViewsCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CommentsCount)
+                </td>
+                <td>
+                    @item.LastModified.Day.@item.LastModified.Month.@item.LastModified.Year
+                </td>
+                <td>
+                    @if (ViewBag.UserIsAdmin)
+                    {
+                        <a href="@Url.Action("Stick", "Threads", new { id = item.ThreadId }, null)">
+                            <img src="~/Icons/unPinned.jpg" width="32" height="32" />
+                        </a>
+                    }
+                    else
+                    {
+                        <img src="~/Icons/unPinned.jpg" width="32" height="32" />
+                    }
+                </td>
+                @if (ViewBag.UserIsAdmin)
+                {
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ThreadId })
+                        @Html.ActionLink("Details", "Details", new { id = item.ThreadId })
+                        @Html.ActionLink("Delete", "Delete", new { id = item.ThreadId })
+                    </td>
+                }
+            </tr>
+        }
+    }
+</table>
+
+

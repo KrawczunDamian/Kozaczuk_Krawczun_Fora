@@ -1,0 +1,89 @@
+﻿@model Fora2.Models.EditUserViewModel
+@using System.Linq
+@using System.Collections.Generic;
+@{
+    ViewBag.Title = "Edit User";
+}
+
+<h2>@ViewBag.Title</h2>
+@using  Fora2.Models;
+@using System.Data.Entity;
+@using (Html.BeginForm("EditUser", "Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.Id, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Id, new { @class = "form-control", @disabled = true })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+        </div>
+    </div>
+
+    
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Points, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            Current role @Model.Rank
+            @Html.TextBoxFor(m => m.Points, new { @class = "form-control", @type = "number" })
+
+
+
+            @foreach (var rank in (ViewBag.Ranks as DbSet<Rank>
+            ).OrderBy(i => i.Requirement))
+            {
+                <div>@rank.RankName - @rank.Requirement Points</div>
+
+            }
+        </div>
+        
+    </div>
+         
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.UserRoles, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @foreach (var role in ViewBag.AllRoles)
+            {
+                string roleName = role.Name;
+                if (((List<string>)Model.UserRoles).Contains(roleName))
+                {
+                    <div class="form-control" style="border-style:none">
+                        @Html.CheckBoxFor(m => m.AllUserRoles[roleName], new { @checked = "checked"}) @roleName
+                    </div>
+                }
+
+                else
+                {
+        <div class="form-control" style="border-style:none">
+            @Html.CheckBoxFor(m => m.AllUserRoles[roleName]) @roleName
+        </div>
+                }
+
+            }
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Update" /> <button class="btn btn-default" onclick="location.href='@Url.Action("ManageUsers", "Admin")';return false;">Cancel</button>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+

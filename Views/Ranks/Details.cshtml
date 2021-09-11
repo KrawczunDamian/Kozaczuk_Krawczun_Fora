@@ -1,0 +1,34 @@
+﻿@model Fora2.Models.Rank
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Rank</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Requirement)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Requirement)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RankName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RankName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.RankId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

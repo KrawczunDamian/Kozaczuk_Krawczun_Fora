@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Fora2.Models.ThreadMessage>
+
+@{
+    ViewBag.Title = "All Thread Messages (Comments)";
+}
+
+    <h2>All Thread Messages (Comments)</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Author
+        </th>
+        <th>
+            Thread
+        </th>
+
+        <th>
+            Comment
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreateDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastModified)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Author.Email)
+    </td>
+    <td>
+        @Html.ActionLink(item.Thread.Name, "Details", "Threads", new { id = item.ThreadId }, null)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Context)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.CreateDate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.LastModified)
+    </td>
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = item.ThreadMessageId }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.ThreadMessageId })
+    </td>
+</tr>
+}
+
+</table>

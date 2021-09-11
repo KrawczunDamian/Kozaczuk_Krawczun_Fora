@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Fora2.Models.Forum>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+@if (ViewBag.IsExcatForumCategorySelected)
+{
+<div class="threadCategory">@Html.ActionLink("Home", "Index", "Home")>@Html.ActionLink("Categories", "Index", "ForumCategories")><u>@ViewBag.SelectedForumCategoryName</u></div>
+}
+else
+{
+    <div class="threadCategory"><u>All forums</u></div>
+}
+@if (ViewBag.UserIsAdmin)
+{
+<p>
+    <button class="btn btn-default" onclick="location.href='@Url.Action("Create")';return false;">Add forum</button>
+</p>
+}
+<table class="table">
+    <tr>
+        @if (!ViewBag.IsExcatForumCategorySelected)
+        {
+            <th>
+                Category
+            </th>
+        }
+        <th>
+            Forums
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.OrderBy(i => i.ForumCategory.Name))
+    {
+        <tr>
+            @if (!ViewBag.IsExcatForumCategorySelected)
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.ForumCategory.Name)
+                </td>
+            }
+            <td>
+                @Html.ActionLink(item.Name, "Index", "Threads", new { id = item.ForumId }, null)
+            </td>
+
+            <td>
+                @{ int messagesCount = 0;}
+                @foreach (var thread in item.Threads)
+                {
+                    messagesCount += thread.ThreadMessages.Count;
+                    
+                }
+
+                Threads: @item.Threads.Count, Answers: @messagesCount
+                <!--THIS CRUD IS AVALIBLE FOR ADMIN ONLY-->
+                @if(ViewBag.UserIsAdmin)
+
+                { 
+                @Html.ActionLink("Edit", "Edit", new { id = item.ForumId }) @: 
+                @Html.ActionLink("Delete", "Delete", new { id = item.ForumId }) 
+
+                }
+            </td>
+        </tr>
+    }
+
+</table>
